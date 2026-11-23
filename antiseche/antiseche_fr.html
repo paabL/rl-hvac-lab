@@ -1,0 +1,64 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Antisèche · Labo RL, prototype v3</title><style>
+:root { --ink: #1d1d1f; --bg: #ffffff; --accent: #2b5fab; --code-bg: #f3f5f8; --say: #1f6f3a; }
+@media (prefers-color-scheme: dark) { :root { --ink: #f2f2f7; --bg: #1c1c1e; --accent: #7fa8e8; --code-bg: #2c2c2e; --say: #7fd39a; } }
+body { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.38;
+       max-width: 40em; margin: 0 auto; padding: 0.6em 0.9em; color: var(--ink); background: var(--bg); }
+h1 { font-size: 1.25em; margin: 0.2em 0 0.4em; }
+h2 { font-size: 1.05em; margin: 0.9em 0 0.3em; padding-top: 0.35em; border-top: 2px solid var(--accent); color: var(--accent); }
+pre { background: var(--code-bg); border-left: 3px solid var(--accent); padding: 0.45em 0.6em; overflow-x: auto; margin: 0.3em 0; }
+code { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.84em; }
+.say { color: var(--say); font-style: italic; }
+p { margin: 0.3em 0; } ul { padding-left: 1.2em; margin: 0.3em 0; } li { margin: 0.15em 0; }
+@page { size: 150mm 297mm; margin: 6mm; }
+@media print { :root { --ink: #1d1d1f; --bg: #ffffff; --accent: #2b5fab; --code-bg: #f3f5f8; --say: #1f6f3a; }
+  body { font-size: 9.6px; max-width: none; padding: 0; } h2 { break-after: avoid; } pre { break-inside: avoid; } }
+</style></head><body>
+<h1>Antisèche · Labo RL, prototype v3</h1>
+<p>À garder à côté de Colab, dans le notebook étudiant (<code>lab_rl_etudiant.ipynb</code>). Dans chaque <code>EXERCICE</code>, remplacer les <code>___</code> par le code ci-dessous. Les <code>#</code> disent en gros quoi dire en tapant chaque ligne. Tant qu'un exercice est vide, la suite tourne avec la version du labo.</p>
+<p><strong>Déroulé :</strong> cellule 0 (installation, télécharge les fichiers) · boucle Gym · §1 schémas · §2 vocabulaire, maison, ex. 1, thermostat · §3 ex. 2, agent classique · §4 ex. 3, robuste contre oracle · §5 agent, ex. 4, col, tableau mémoire · §6 mémoriser, ACP · §7 ex. 5, dérive · §8 synthèse.</p>
+<h2>1/5 · <code>mon_step</code> (section 2)</h2>
+<pre><code class="language-python">dTa = (xi[&quot;UA&quot;] * (t_ext - Ta)    <span class="say"># l'air fuit dehors : UA × écart</span>
+       + HAM * (Tm - Ta)          <span class="say"># il échange avec les murs</span>
+       + q_pompe + QINT) / CA     <span class="say"># + pompe + gens, ÷ capacité</span>
+dTm = HAM * (Ta - Tm) / xi[&quot;Cm&quot;]  <span class="say"># les murs suivent l'air, lentement</span>
+</code></pre>
+<p><strong>Dire :</strong> capacité × vitesse = somme des flux, puis un pas d'Euler (déjà écrit). La masse est lente et cachée : c'est elle qui permet de préchauffer.</p>
+<p><strong>Attendu :</strong> <code>Exercice 1 : ✓ correct</code>.</p>
+<h2>2/5 · <code>ma_maj</code> (section 3)</h2>
+<pre><code class="language-python">poids = (G * (A - P)).reshape(-1)     <span class="say"># retour × (action − proba)</span>
+gradient = X2.T @ poids / len(poids)  <span class="say"># le Xᵀ(y − ŷ)/n du cours 2</span>
+</code></pre>
+<p><strong>Dire :</strong> la régression logistique du cours 2 : l'étiquette est l'action jouée, et chaque exemple pèse son retour. Une action suivie d'un bon retour devient plus probable.</p>
+<p><strong>Attendu :</strong> coût de 116 à environ 12 $/jour ; poids « Ta − 21 » ≈ −2,1, « pointe maintenant » ≈ −0,4, « pointe bientôt » ≈ 0 (il ne préchauffe pas).</p>
+<h2>3/5 · <code>mes_maisons</code> (section 4)</h2>
+<pre><code class="language-python">w = largeur * np.log(np.sqrt(FACTEUR[k]))  <span class="say"># demi-boîte, en log</span>
+maisons[k] = NOMINAL[k] * np.exp(          <span class="say"># nominal × un facteur</span>
+    rng.uniform(-w, w, n))                 <span class="say"># tiré uniforme en log</span>
+</code></pre>
+<p><strong>Dire :</strong> la domain randomization, c'est l'augmentation de données du RL. En log, « deux fois plus » et « deux fois moins » sont aussi probables.</p>
+<p><strong>Attendu :</strong> UA de 87 à 260, Cm de 1,7e7 à 5,2e7, mu de 0,92 à 2,77.</p>
+<h2>4/5 · <code>mon_grad_J</code> (section 5)</h2>
+<pre><code class="language-python">dJ_db = (2 * s_xi**2 * erreur * c  <span class="say"># lire paie si la mémoire a ξ</span>
+         + 2 * b * s_eps**2)       <span class="say"># mais lire du bruit coûte</span>
+dJ_dc = 2 * s_xi**2 * erreur * b   <span class="say"># écrire paie si quelqu'un lit</span>
+</code></pre>
+<p><strong>Dire :</strong> en (0, 0), les deux dérivées sont nulles : lire une mémoire vide ne sert à rien, écrire une mémoire que personne ne lit non plus. C'est un col. La croix verte est l'objectif.</p>
+<p><strong>Attendu :</strong> gradient au col <code>(0.0, -0.0)</code>. Curseur « tête » à 0,5 : toutes les trajectoires vont vers la croix.</p>
+<h2>5/5 · <code>demi_vie</code> (section 7)</h2>
+<pre><code class="language-python">estimation = x.expanding().mean()       <span class="say"># cumulée : n'oublie rien</span>
+estimation = x.ewm(halflife=12).mean()  <span class="say"># oublie : demi-vie 12 h</span>
+</code></pre>
+<p><strong>Dire :</strong> la moyenne cumulée met autant de temps à se corriger que son âge ; la moyenne exponentielle oublie, sa demi-vie reste constante.</p>
+<p><strong>Attendu :</strong> cumulée 11, 23, 47, 95, 191 ; exponentielle 7, 9, puis 11.</p>
+<h2>Réponses rapides et chiffres</h2>
+<ul>
+<li><strong>PPO (section 3) :</strong> le policy gradient de REINFORCE, avec l'advantage Â (mieux ou moins bien que prévu, grâce au critic) à la place du retour, et un clip : L = E[min(ρ·Â, clip(ρ, 0,8, 1,2)·Â)], ρ = π_nouv / π_anc. Une mise à jour ne peut pas trop changer la politique.</li>
+<li><strong>Poids de REINFORCE :</strong> plus il fait chaud, moins il chauffe ; il évite la pointe ; il ne préchauffe pas encore.</li>
+<li><strong>Agent classique (maison nominale) :</strong> thermostat 7,7, thermostat qui préchauffe 6,5, agent 6,0 $/jour.</li>
+<li><strong>Écart à l'oracle (5,5 $/jour) :</strong> thermostat +88 %, classique ailleurs +126 %, robuste +11 %, GRU sans tête +6 %, GRU avec tête +3 %.</li>
+<li><strong>Col :</strong> une boîte plus large fait sortir plus vite ; la tête donne un gradient à l'écriture, et la lecture suit.</li>
+<li><strong>Quel agent écoute sa mémoire ?</strong> Celui dont le coût monte le plus quand on lui donne la mémoire d'une autre maison (colonne déménager : +23 % avec tête, +11 % sans).</li>
+<li><strong>Mémoriser :</strong> 4 maisons, +3,5 % chez lui et +15 % ailleurs ; 16 maisons, +2 % partout.</li>
+<li><strong>Demi-vie après le saut :</strong> sans dérive à l'entraînement, il se comporte comme la moyenne cumulée (+13 % après le saut) ; avec dérive, comme la moyenne exponentielle (+7 %).</li>
+</ul>
+</body></html>

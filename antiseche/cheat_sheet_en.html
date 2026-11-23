@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cheat sheet · RL lab, prototype v3</title><style>
+:root { --ink: #1d1d1f; --bg: #ffffff; --accent: #2b5fab; --code-bg: #f3f5f8; --say: #1f6f3a; }
+@media (prefers-color-scheme: dark) { :root { --ink: #f2f2f7; --bg: #1c1c1e; --accent: #7fa8e8; --code-bg: #2c2c2e; --say: #7fd39a; } }
+body { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.38;
+       max-width: 40em; margin: 0 auto; padding: 0.6em 0.9em; color: var(--ink); background: var(--bg); }
+h1 { font-size: 1.25em; margin: 0.2em 0 0.4em; }
+h2 { font-size: 1.05em; margin: 0.9em 0 0.3em; padding-top: 0.35em; border-top: 2px solid var(--accent); color: var(--accent); }
+pre { background: var(--code-bg); border-left: 3px solid var(--accent); padding: 0.45em 0.6em; overflow-x: auto; margin: 0.3em 0; }
+code { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 0.84em; }
+.say { color: var(--say); font-style: italic; }
+p { margin: 0.3em 0; } ul { padding-left: 1.2em; margin: 0.3em 0; } li { margin: 0.15em 0; }
+@page { size: 150mm 297mm; margin: 6mm; }
+@media print { :root { --ink: #1d1d1f; --bg: #ffffff; --accent: #2b5fab; --code-bg: #f3f5f8; --say: #1f6f3a; }
+  body { font-size: 9.6px; max-width: none; padding: 0; } h2 { break-after: avoid; } pre { break-inside: avoid; } }
+</style></head><body>
+<h1>Cheat sheet · RL lab, prototype v3</h1>
+<p>Keep it next to Colab, in the student notebook (<code>rl_lab_student_en.ipynb</code>). In each <code>EXERCISE</code>, replace the <code>___</code> with the code below. The <code>#</code> comments say roughly what to say while typing each line. While an exercise is empty, the rest runs with the lab's version.</p>
+<p><strong>Run order:</strong> cell 0 (Setup, downloads the files) · Gym loop · §1 diagrams · §2 vocabulary, house, ex. 1, thermostat · §3 ex. 2, classic agent · §4 ex. 3, robust vs oracle · §5 agent, ex. 4, saddle, memory table · §6 memorize, PCA · §7 ex. 5, drift · §8 wrap-up.</p>
+<h2>1/5 · <code>my_thermal_step</code> (Section 2)</h2>
+<pre><code class="language-python">dTa = (xi[&quot;UA&quot;] * (t_ext - Ta)     <span class="say"># air leaks out: UA × gap</span>
+       + H_AM * (Tm - Ta)          <span class="say"># it exchanges with the walls</span>
+       + q_pump + Q_INT) / C_AIR   <span class="say"># + pump + people, ÷ capacity</span>
+dTm = H_AM * (Ta - Tm) / xi[&quot;Cm&quot;]  <span class="say"># walls follow the air, slowly</span>
+</code></pre>
+<p><strong>Say:</strong> heat capacity × rate of change = sum of heat flows, then one Euler step (already written). The mass is slow and hidden: it is what makes preheating possible.</p>
+<p><strong>Expect:</strong> <code>Exercise 1: ✓ correct</code>.</p>
+<h2>2/5 · <code>my_update</code> (Section 3)</h2>
+<pre><code class="language-python">weights = (G * (A - P)).reshape(-1)       <span class="say"># return × (action − prob)</span>
+gradient = X2.T @ weights / len(weights)  <span class="say"># Lecture 2's Xᵀ(y − ŷ)/n</span>
+</code></pre>
+<p><strong>Say:</strong> the logistic regression of Lecture 2: the label is the action taken, and each example is weighted by its return. Actions followed by a good return become more likely.</p>
+<p><strong>Expect:</strong> cost from 116 to about 12 $/day; weight "Ta − 21" ≈ −2.1, "peak now" ≈ −0.4, "peak soon" ≈ 0 (no preheating yet).</p>
+<h2>3/5 · <code>my_houses</code> (Section 4)</h2>
+<pre><code class="language-python">w = width * np.log(np.sqrt(FACTOR[k]))  <span class="say"># half-box width, in log</span>
+houses[k] = NOMINAL[k] * np.exp(        <span class="say"># nominal × a random factor</span>
+    rng.uniform(-w, w, n))              <span class="say"># drawn uniformly in log</span>
+</code></pre>
+<p><strong>Say:</strong> domain randomization is data augmentation for RL. In log space, "twice as much" and "half as much" are equally likely.</p>
+<p><strong>Expect:</strong> UA from 87 to 260, Cm from 1.7e7 to 5.2e7, mu from 0.92 to 2.77.</p>
+<h2>4/5 · <code>my_grad_J</code> (Section 5)</h2>
+<pre><code class="language-python">dJ_db = (2 * s_xi**2 * error * c  <span class="say"># reading pays if memory holds ξ</span>
+         + 2 * b * s_eps**2)      <span class="say"># but reading noise costs</span>
+dJ_dc = 2 * s_xi**2 * error * b   <span class="say"># writing pays if someone reads</span>
+</code></pre>
+<p><strong>Say:</strong> at (0, 0) both derivatives are zero: reading an empty memory is useless, and so is writing a memory nobody reads. It is a saddle. The green cross is the target.</p>
+<p><strong>Expect:</strong> gradient at the saddle <code>(0.0, -0.0)</code>. Head slider at 0.5: every run goes to the cross.</p>
+<h2>5/5 · <code>half_life</code> (Section 7)</h2>
+<pre><code class="language-python">estimate = x.expanding().mean()       <span class="say"># cumulative: forgets nothing</span>
+estimate = x.ewm(halflife=12).mean()  <span class="say"># forgets: half-life 12 h</span>
+</code></pre>
+<p><strong>Say:</strong> the cumulative mean takes as long to correct as its age; the exponential mean forgets, and its half-life stays constant.</p>
+<p><strong>Expect:</strong> cumulative 11, 23, 47, 95, 191; exponential 7, 9, then 11.</p>
+<h2>Quick answers and numbers</h2>
+<ul>
+<li><strong>PPO (Section 3):</strong> REINFORCE's policy gradient with the advantage Â (better or worse than expected, thanks to the critic) instead of the return, plus a clip: L = E[min(ρ·Â, clip(ρ, 0.8, 1.2)·Â)], ρ = π_new / π_old. One update cannot move the policy too much.</li>
+<li><strong>REINFORCE weights:</strong> the warmer, the less it heats; it avoids the peak; it does not preheat yet.</li>
+<li><strong>Classic agent (nominal house):</strong> thermostat 7.7, preheating thermostat 6.5, agent 6.0 $/day.</li>
+<li><strong>Gap to the oracle (5.5 $/day):</strong> thermostat +88%, classic elsewhere +126%, robust +11%, GRU without head +6%, GRU with head +3%.</li>
+<li><strong>Saddle:</strong> a wider box escapes faster; the head gives writing a gradient of its own, and reading follows.</li>
+<li><strong>Which agent listens to its memory?</strong> The one whose cost jumps most when handed another house's memory (swap column: +23% with head, +11% without).</li>
+<li><strong>Memorize:</strong> 4 houses, +3.5% at home and +15% elsewhere; 16 houses, +2% everywhere.</li>
+<li><strong>Half-life after the jump:</strong> trained without drift, it behaves like the cumulative mean (+13% after the jump); with drift, like the exponential mean (+7%).</li>
+</ul>
+</body></html>

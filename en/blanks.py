@@ -15,6 +15,7 @@ class Blank:
 
     __add__ = __radd__ = __sub__ = __rsub__ = __mul__ = __rmul__ = _stop
     __truediv__ = __rtruediv__ = __pow__ = __rpow__ = __neg__ = __abs__ = _stop
+    __matmul__ = __rmatmul__ = __lt__ = __le__ = __gt__ = __ge__ = __len__ = _stop
     __getitem__ = __iter__ = __call__ = __float__ = __array__ = _stop
 
     def __getattr__(self, name):

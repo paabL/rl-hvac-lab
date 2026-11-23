@@ -1,7 +1,7 @@
-"""RL lab for home heating: two-temperature house simulator, agents and diagnostics (prototype).
+"""RL lab for home heating: the house simulator, the baseline thermostats, REINFORCE and the saddle toy.
 
-English version of lab_utils.py (same code and numbers, English names).
-Everything runs on CPU. The simulator is NumPy, vectorized over N houses.
+English version of lab_utils.py (same code, English names). Everything runs on CPU, in NumPy, vectorized over
+N houses. The PPO agents live in rl_sb3_en.py (Stable-Baselines3).
 """
 from __future__ import annotations
 
@@ -13,8 +13,6 @@ import urllib.request
 
 import numpy as np
 import pandas as pd
-import torch
-import torch.nn as nn
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -207,147 +205,6 @@ def preheating_thermostat(env):
     return thermostat(env, target)
 
 
-# ---------------------------------------------------------------- networks
-
-class Agent(nn.Module):
-    """Actor-critic. memory=False: memoryless MLP. memory=True: GRU h = f(W[x, h_prev] + w0).
-
-    prediction_head=True: a head predicts next hour's temperature change from the memory
-    and the action taken; it trains the memory directly, without going through the actor.
-    """
-
-    def __init__(self, obs_dim=OBS_DIM, memory=True, prediction_head=False, hidden=64):
-        super().__init__()
-        self.memory, self.head = memory, prediction_head
-        self.enc = nn.Sequential(nn.Linear(obs_dim, hidden), nn.Tanh())
-        self.gru = nn.GRU(hidden, hidden, batch_first=True) if memory else None
-        self.pi = nn.Sequential(nn.Linear(hidden + obs_dim, hidden), nn.Tanh(), nn.Linear(hidden, len(LEVELS)))
-        self.v = nn.Sequential(nn.Linear(hidden + obs_dim, hidden), nn.Tanh(), nn.Linear(hidden, 1))
-        self.pred = nn.Sequential(nn.Linear(hidden + obs_dim + len(LEVELS), hidden), nn.Tanh(), nn.Linear(hidden, 1))
-
-    def forward(self, obs, h=None):
-        """obs: (B, T, obs_dim). Returns logits, values, memories (B, T, hidden), last h."""
-        z = self.enc(obs)
-        if self.memory:
-            m, h = self.gru(z, h)
-        else:
-            m = z
-        x = torch.cat([m, obs], -1)
-        return self.pi(x), self.v(x).squeeze(-1), m, h
-
-    def predict(self, m, obs, a):
-        return self.pred(torch.cat([m, obs, nn.functional.one_hot(a, len(LEVELS)).float()], -1)).squeeze(-1)
-
-
-# ---------------------------------------------------------------- PPO (full episodes, memory reset at the start)
-
-def rollout(agent, env, privileged=False, greedy=False, xi=None, starts=None, erase_at=None, swap_at=None):
-    """Plays one full episode on the N houses. Returns a dict of (N, H, ...) arrays."""
-    o = env.reset(xi=xi, starts=starts)
-    O, A, LP, V, R, C, DISC, KWH, TA, M = [], [], [], [], [], [], [], [], [], []
-    h = None
-    with torch.no_grad():
-        for t in range(H):
-            if erase_at is not None and t == erase_at and h is not None:
-                h = torch.zeros_like(h)
-            if swap_at is not None and t == swap_at and h is not None:
-                h = h[:, swap_pairs(env.n)]
-            ob = env.obs_privileged() if privileged else o
-            logits, v, m, h = agent(torch.from_numpy(ob)[:, None], h)
-            dist = torch.distributions.Categorical(logits=logits[:, 0])
-            a = logits[:, 0].argmax(-1) if greedy else dist.sample()
-            O.append(ob); A.append(a.numpy()); LP.append(dist.log_prob(a).numpy()); V.append(v[:, 0].numpy())
-            M.append(m[:, 0].numpy())
-            o, r, c, disc, kwh = env.step(a.numpy())
-            R.append(r); C.append(c); DISC.append(disc); KWH.append(kwh); TA.append(env.Ta.copy())
-    st = lambda x: np.stack(x, 1)
-    return dict(obs=st(O), a=st(A), logp=st(LP), v=st(V), r=st(R).astype(np.float32), cost=st(C), discomfort=st(DISC),
-                kwh=st(KWH), Ta=st(TA), m=st(M), xi=env.xi0, start=env.start)
-
-
-def swap_pairs(n):
-    """Swaps memories in pairs: 0↔1, 2↔3, ..."""
-    p = np.arange(n)
-    p[0::2], p[1::2] = np.arange(1, n, 2), np.arange(0, n, 2)
-    return torch.from_numpy(p)
-
-
-def gae(r, v, gamma=0.97, lam=0.95):
-    adv = np.zeros_like(r)
-    last = 0.0
-    for t in reversed(range(r.shape[1])):
-        nv = v[:, t + 1] if t + 1 < r.shape[1] else 0.0
-        delta = r[:, t] + gamma * nv - v[:, t]
-        last = delta + gamma * lam * last
-        adv[:, t] = last
-    return adv, adv + v
-
-
-def train(agent, env, iterations=200, privileged=False, lr=3e-4, epochs=4, mb=64, clip=0.2, ent=0.01,
-          beta_pred=1.0, verbose=True):
-    """Recurrent PPO on full episodes. Returns the history of the mean cost per day."""
-    opt = torch.optim.Adam(agent.parameters(), lr=lr)
-    hist = []
-    t0 = time.time()
-    for it in range(iterations):
-        d = rollout(agent, env, privileged)
-        adv, ret = gae(d["r"], d["v"])
-        obs, a, lp0 = map(torch.from_numpy, (d["obs"], d["a"], d["logp"]))
-        adv, ret = torch.from_numpy(adv), torch.from_numpy(ret)
-        # head target: next hour's (normalized) change in air temperature
-        Ta_now = 21.0 + 2.0 * d["obs"][:, :, 0]
-        target = torch.from_numpy(((d["Ta"] - Ta_now) / 1.0).astype(np.float32))
-        n = obs.shape[0]
-        for _ in range(epochs):
-            perm = torch.randperm(n)
-            for i in range(0, n, mb):
-                idx = perm[i:i + mb]
-                logits, v, m, _ = agent(obs[idx])
-                dist = torch.distributions.Categorical(logits=logits)
-                lp = dist.log_prob(a[idx])
-                ad = adv[idx]
-                ad = (ad - ad.mean()) / (ad.std() + 1e-8)
-                ratio = torch.exp(lp - lp0[idx])
-                l_pi = -torch.min(ratio * ad, torch.clamp(ratio, 1 - clip, 1 + clip) * ad).mean()
-                l_v = ((v - ret[idx]) ** 2).mean()
-                loss = l_pi + 0.5 * l_v - ent * dist.entropy().mean()
-                if agent.head:
-                    p = agent.predict(m, obs[idx], a[idx])
-                    loss = loss + beta_pred * ((p - target[idx]) ** 2).mean()
-                opt.zero_grad()
-                loss.backward()
-                nn.utils.clip_grad_norm_(agent.parameters(), 0.5)
-                opt.step()
-        c_day = d["cost"].sum(1).mean() / 7
-        hist.append(c_day)
-        if verbose and (it % 20 == 0 or it == iterations - 1):
-            print(f"iteration {it:4d}  mean cost {c_day:6.2f} $/day  discomfort {d['discomfort'].sum(1).mean()/7:5.2f} K·h/day  "
-                  f"({time.time()-t0:4.0f} s)")
-    return hist
-
-
-# ---------------------------------------------------------------- evaluation
-
-def evaluate(policy, weather, xi, starts, privileged=False, drift=False, seed=123, **kw):
-    """Runs a policy greedily on fixed houses and fixed weather windows. Returns a dict of (N, H) arrays."""
-    env = Houses(weather, len(starts), drift=drift, seed=seed)
-    if isinstance(policy, nn.Module):
-        return rollout(policy, env, privileged, greedy=True, xi=xi, starts=starts, **kw)
-    env.reset(xi=xi, starts=starts)
-    C, DISC, TA = [], [], []
-    for t in range(H):
-        _, _, c, disc, _ = env.step(policy(env))
-        C.append(c); DISC.append(disc); TA.append(env.Ta.copy())
-    return dict(cost=np.stack(C, 1), discomfort=np.stack(DISC, 1), Ta=np.stack(TA, 1))
-
-
-def test_bench(weather, n=128, width=1.0, seed=7):
-    """Fixed test houses and weather windows, so every agent is compared on the same ground."""
-    rng = np.random.default_rng(seed)
-    T = Houses(weather, 1).T
-    return sample_houses(n, width, rng), rng.integers(0, len(T) - H - 4, n)
-
-
 # ---------------------------------------------------------------- toy model of the saddle
 
 def J(b, c, s_xi=1.0, s_eps=1.0):
@@ -366,58 +223,6 @@ def descent(b, c, eta=0.05, steps=400, **kw):
         b, c = b - eta * gb, c - eta * gc
         traj.append((b, c))
     return np.array(traj)
-
-
-# ---------------------------------------------------------------- memory diagnostics
-
-def load_agent(name, folder=os.path.join(HERE, "agents")):
-    from sklearn.linear_model import Ridge  # noqa: F401  (checks the dependency early)
-    cfg = json.load(open(os.path.join(folder, f"{name}.json")))
-    sd = torch.load(os.path.join(folder, f"{name}.pt"), weights_only=True)
-    memory = any(k.startswith("gru.") for k in sd)
-    obs_dim = sd["enc.0.weight"].shape[1]
-    head = cfg.get("prediction_head", "in_context" in name or "memorize" in name or name == "drift")
-    ag = Agent(obs_dim=obs_dim, memory=memory, prediction_head=head)
-    ag.load_state_dict(sd)
-    ag.eval()
-    return ag, cfg
-
-
-def cost_per_day(d):
-    return d["cost"].sum(1) / (d["cost"].shape[1] / 24)
-
-
-def erase_effect(agent, weather, xi, starts, t=72, window=24, **kw):
-    """Mean extra cost (%) over the `window` hours after the memory is wiped at hour t."""
-    d0 = evaluate(agent, weather, xi, starts, **kw)
-    d1 = evaluate(agent, weather, xi, starts, erase_at=t, **kw)
-    c0, c1 = d0["cost"][:, t:t + window].sum(1), d1["cost"][:, t:t + window].sum(1)
-    return 100 * (c1.sum() - c0.sum()) / c0.sum()
-
-
-def swap_effect(agent, weather, xi, starts, t=72, window=24, **kw):
-    """Mean extra cost (%) when the memories of two houses are swapped at hour t."""
-    d0 = evaluate(agent, weather, xi, starts, **kw)
-    d1 = evaluate(agent, weather, xi, starts, swap_at=t, **kw)
-    c0, c1 = d0["cost"][:, t:t + window].sum(1), d1["cost"][:, t:t + window].sum(1)
-    return 100 * (c1.sum() - c0.sum()) / c0.sum()
-
-
-def probe(d, hours=(0, 6, 12, 24, 48, 72, 120, 167)):
-    """R² of a Ridge regression that reads ξ (normalized) from the memory, hour by hour.
-
-    Half the houses to fit, half to test. Returns {hour: R² averaged over the 3 parameters}.
-    """
-    from sklearn.linear_model import Ridge
-    from sklearn.metrics import r2_score
-    y = normalize_xi(d["xi"])
-    n = len(y) // 2
-    out = {}
-    for t in hours:
-        X = d["m"][:, t]
-        r = Ridge(alpha=1.0).fit(X[:n], y[:n])
-        out[t] = float(r2_score(y[n:], r.predict(X[n:])))
-    return out
 
 
 # ---------------------------------------------------------------- REINFORCE: logistic regression weighted by the return
@@ -458,4 +263,7 @@ def reinforce(weather, iterations=60, eta=0.05, n=512, seed=0, update=None, verb
 
 def reinforce_update(w, X, A, P, G, eta):
     """w_j ← w_j + η Σ G (a - p) x_j: the logistic-regression gradient step, weighted by the return."""
-    return w + eta * np.einsum("tn,tnj->j", G * (A - P), X) / (X.shape[0] * X.shape[1])
+    X2 = X.reshape(-1, X.shape[-1])             # one example per row
+    weights = (G * (A - P)).reshape(-1)         # return × (action - probability)
+    gradient = X2.T @ weights / len(weights)    # like logistic regression: Xᵀ (y - ŷ) / n
+    return w + eta * gradient
