@@ -61,6 +61,7 @@ def build_copy(target):
     with tarfile.open(fileobj=BytesIO(archive)) as tar:
         tar.extractall(target, filter="data")
     shutil.rmtree(target / "tools", ignore_errors=True)
+    (target / ".gitignore").unlink(missing_ok=True)
     build_zips(target)
 
 
