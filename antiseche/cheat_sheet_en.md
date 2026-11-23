@@ -1,4 +1,4 @@
-# Cheat sheet · RL lab, prototype v3
+# Cheat sheet · RL lab
 
 Keep it next to Colab, in the student notebook (`rl_lab_student_en.ipynb`). In each `EXERCISE`, replace the `___` with the code below. The `#` comments say roughly what to say while typing each line. While an exercise is empty, the rest runs with the lab's version.
 

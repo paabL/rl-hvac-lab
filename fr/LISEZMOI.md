@@ -1,10 +1,10 @@
-# Lab RL : un thermostat, mille maisons (prototype v3)
+# Lab RL : un thermostat, mille maisons
 
 [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb) version formateur, avec les corrections
 
 [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/lab_rl_etudiant.ipynb) version étudiante, à compléter au tableau
 
-Prototype à tester et recadrer, pas la version finale. Tout tourne sur CPU.
+Tout tourne sur CPU.
 
 ## Lancer
 
@@ -32,7 +32,7 @@ Réglages dans la première cellule :
 | `schemas.py`, `images/` | les schémas du notebook, en français et en anglais (dessins du robot et des bâtiments repris du deck PluRL) |
 | `entrainer_agents.py` | recalcule un agent : `python entrainer_agents.py contexte 400` (ajouter `--reprendre` pour continuer) |
 | `agents/` | les agents précalculés (`.zip` de SB3 sans mémoire, `.pt` pour nos GRU) et leurs courbes d'apprentissage (`.json`) |
-| `meteo_montreal.csv` | la météo utilisée (synthétique pour l'instant) |
+| `meteo_montreal.csv` | la météo utilisée (synthétique) |
 | `lab_rl_prototype.zip` | tout ce qu'il faut à Colab, sans le notebook exécuté |
 
 L'antisèche d'une page (code à taper, avec ce qu'il faut dire pour chaque ligne) est dans `../antiseche/`.

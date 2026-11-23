@@ -1,8 +1,8 @@
-# Lab 10 · RL for home heating (prototype v3)
+# Lab 10 · RL for home heating
 
 *Version française plus bas.*
 
-**Status: prototype, not validated yet.** The numbers come from one seed, the weather is synthetic, and the content still needs to be reviewed by the teaching team.
+The numbers come from one seed and the weather is synthetic.
 
 **For students, use the student notebooks below:** the other notebooks contain the solutions to the five exercises.
 
@@ -26,9 +26,9 @@ Each exercise has `___` to replace. While it is empty, the notebook keeps runnin
 
 ---
 
-# Labo 10 · RL pour le chauffage (prototype v3)
+# Labo 10 · RL pour le chauffage
 
-**Statut : prototype, pas encore validé.** Les chiffres viennent d'une seule graine, la météo est synthétique et le contenu doit encore être relu par l'équipe.
+Les chiffres viennent d'une seule graine et la météo est synthétique.
 
 **Pour les étudiant·e·s, utilisez les notebooks étudiants ci-dessous :** les autres contiennent les corrections des cinq exercices.
 
@@ -36,7 +36,7 @@ Un thermostat, mille maisons : un labo de 2 heures qui monte du RL classique sur
 
 | Dossier | Langue | Commencer par |
 | --- | --- | --- |
-| [`fr/`](fr/) | français, plus court, sans notes pour l'animateur pour l'instant | [`fr/LISEZMOI.md`](fr/LISEZMOI.md) |
+| [`fr/`](fr/) | français, plus court, sans notes pour l'animateur | [`fr/LISEZMOI.md`](fr/LISEZMOI.md) |
 | [`en/`](en/) | anglais, avec notes pour l'animateur et réponses | [`en/README.md`](en/README.md) |
 | [`antiseche/`](antiseche/) | l'antisèche d'une page, FR et EN (HTML pour l'écran, PDF à imprimer) | `antiseche_fr.pdf`, `cheat_sheet_en.pdf` |
 

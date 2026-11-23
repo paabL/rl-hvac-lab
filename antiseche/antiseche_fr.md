@@ -1,4 +1,4 @@
-# Antisèche · Labo RL, prototype v3
+# Antisèche · Labo RL
 
 À garder à côté de Colab, dans le notebook étudiant (`lab_rl_etudiant.ipynb`). Dans chaque `EXERCICE`, remplacer les `___` par le code ci-dessous. Les `#` disent en gros quoi dire en tapant chaque ligne. Tant qu'un exercice est vide, la suite tourne avec la version du labo.
 

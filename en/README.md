@@ -1,10 +1,10 @@
-# RL lab, English version: one thermostat, a thousand houses (prototype v3)
+# RL lab, English version: one thermostat, a thousand houses
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb) instructor version, with the solutions
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_student_en.ipynb) student version, to fill in on the board
 
-A 2-hour Jupyter lab on reinforcement learning for home heating (IFT3700/IFT6758). This is a **prototype**, not the final version. Everything runs on CPU, in Colab or locally.
+A 2-hour Jupyter lab on reinforcement learning for home heating (IFT3700/IFT6758). Everything runs on CPU, in Colab or locally.
 
 ## Run it in Colab
 
@@ -40,5 +40,5 @@ Open the notebook in Jupyter from this folder. You need Python 3.10 or newer wit
 | `blanks.py` | the `___` and the exercise checks of the student version |
 | `schemas.py`, `images/` | the notebook's diagrams, shared with the French version (robot and building drawings from the PluRL deck) |
 | `agents/` | the pre-trained agents (SB3 `.zip` without memory, `.pt` for our GRUs) and their learning curves (`.json`) |
-| `montreal_weather.csv` | the hourly January weather used (synthetic for now) |
+| `montreal_weather.csv` | the hourly January weather used (synthetic) |
 | `train_agents_en.py` | retrains one agent, e.g. `python train_agents_en.py in_context 400` (add `--resume` to continue). Not needed to teach. |
