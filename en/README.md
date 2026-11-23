@@ -1,5 +1,10 @@
 # RL lab, English version: one thermostat, a thousand houses
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/en/rl_lab_prototype_en.ipynb)
+
+> **For TAs.** Since this repository is private, Colab asks once for permission to read your private GitHub repositories. It opens only the notebook, so also download [`rl_lab_en.zip`](https://github.com/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/en/rl_lab_en.zip), then pick it in the first code cell.
+
+
 A 2-hour Jupyter lab on reinforcement learning for home heating (IFT3700/IFT6758). This is a **prototype**, not the final version. Everything runs on CPU, in Colab or locally.
 
 ## Run it in Colab (3 steps)
@@ -34,6 +39,7 @@ Unzip `rl_lab_en.zip`, then open `rl_lab_prototype_en.ipynb` in Jupyter from tha
 | `rl_lab_prototype_en_executed.ipynb` | the same notebook, already run (not in the zip) |
 | `rl_lab_en.zip` | everything Colab needs: the files below plus the notebook |
 | `lab_utils_en.py` | house simulator, thermostats, agents, PPO, REINFORCE, memory diagnostics, saddle toy |
+| `schemas.py` | the three diagrams (house, RL loop, memory agent), shared with the French version |
 | `agents/` | the pre-trained agents (`.pt`) and their learning curves (`.json`) |
 | `montreal_weather.csv` | the hourly January weather used (synthetic for now) |
 | `train_agents_en.py` | retrains one agent, e.g. `python train_agents_en.py in_context 400` (add `--resume` to continue). Not needed to teach. |

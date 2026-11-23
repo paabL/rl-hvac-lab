@@ -13,7 +13,9 @@ One thermostat, a thousand houses: a 2-hour lab that climbs from classic RL on o
 | [`en/`](en/) | English, with instructor notes and answers | [`en/README.md`](en/README.md) |
 | [`fr/`](fr/) | French, shorter, no instructor notes yet | [`fr/LISEZMOI.md`](fr/LISEZMOI.md) |
 
-**Colab.** This repository is private, so Colab cannot fetch the companion files by itself. Download the language's zip (`en/rl_lab_en.zip` or `fr/lab_rl_prototype.zip`), open the notebook in Colab, run the first code cell, and pick the zip with the **Choose files** button.
+**Colab.** English: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/en/rl_lab_prototype_en.ipynb) French: [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/fr/prototype_lab_rl.ipynb)
+
+This repository is private, so Colab asks once for permission to read your private GitHub repositories. It opens only the notebook, so also download the language's zip (`en/rl_lab_en.zip` or `fr/lab_rl_prototype.zip`) and pick it in the first code cell.
 
 **After changing a file,** rebuild that language's zip so it stays in sync with the folder.
 
@@ -32,6 +34,8 @@ Un thermostat, mille maisons : un labo de 2 heures qui monte du RL classique sur
 | [`fr/`](fr/) | français, plus court, sans notes pour l'animateur pour l'instant | [`fr/LISEZMOI.md`](fr/LISEZMOI.md) |
 | [`en/`](en/) | anglais, avec notes pour l'animateur et réponses | [`en/README.md`](en/README.md) |
 
-**Colab.** Ce dépôt est privé : Colab ne peut donc pas récupérer seul les fichiers compagnons. Téléchargez le zip de votre langue (`fr/lab_rl_prototype.zip` ou `en/rl_lab_en.zip`), ouvrez le notebook dans Colab, exécutez la première cellule de code et choisissez le zip avec le bouton **Choose files**.
+**Colab.** Français : [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/fr/prototype_lab_rl.ipynb) Anglais : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/en/rl_lab_prototype_en.ipynb)
+
+Ce dépôt étant privé, Colab demande une fois l'autorisation de lire vos dépôts GitHub privés. Il n'ouvre que le notebook : téléchargez aussi le zip de votre langue (`fr/lab_rl_prototype.zip` ou `en/rl_lab_en.zip`), puis choisissez-le dans la première cellule de code.
 
 **Après avoir modifié un fichier,** reconstruisez le zip de la langue concernée pour qu'il reste à jour.
