@@ -1,8 +1,8 @@
 # Prototype du lab RL : un thermostat, mille maisons
 
-[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/fr/prototype_lab_rl.ipynb)
+[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb)
 
-> **Pour les TA.** Le dépôt étant privé, Colab demande une fois l'autorisation de lire vos dépôts GitHub privés. Il n'ouvre que le notebook : téléchargez aussi [`lab_rl_prototype.zip`](https://github.com/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/fr/lab_rl_prototype.zip), puis choisissez-le dans la première cellule de code.
+> **Pour les TA.** Le dépôt étant privé, autorisez d'abord Colab une fois : **Fichier > Ouvrir un notebook > GitHub**, puis cochez **Include private repos**. Il n'ouvre que le notebook : téléchargez aussi [`lab_rl_prototype.zip`](https://github.com/paabL/rl-hvac-lab/blob/main/fr/lab_rl_prototype.zip), puis choisissez-le dans la première cellule de code.
 
 
 Prototype à tester et recadrer, pas la version finale. Tout tourne sur CPU.

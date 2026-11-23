@@ -1,8 +1,8 @@
 # RL lab, English version: one thermostat, a thousand houses
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/en/rl_lab_prototype_en.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb)
 
-> **For TAs.** Since this repository is private, Colab asks once for permission to read your private GitHub repositories. It opens only the notebook, so also download [`rl_lab_en.zip`](https://github.com/milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/en/rl_lab_en.zip), then pick it in the first code cell.
+> **For TAs.** Since this repository is private, authorize Colab once first: **File > Open notebook > GitHub**, then tick **Include private repos**. It opens only the notebook, so also download [`rl_lab_en.zip`](https://github.com/paabL/rl-hvac-lab/blob/main/en/rl_lab_en.zip), then pick it in the first code cell.
 
 
 A 2-hour Jupyter lab on reinforcement learning for home heating (IFT3700/IFT6758). This is a **prototype**, not the final version. Everything runs on CPU, in Colab or locally.
