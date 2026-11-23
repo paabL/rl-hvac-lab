@@ -237,26 +237,26 @@ if done is not None:
 }
 
 SETUP = {
-    "fr": ('''# Fichiers compagnons : lab_utils.py, rl_sb3.py, gru_ppo.py, schemas.py, images/, agents/, meteo_montreal.csv, tous dans lab_rl_prototype.zip
+    "fr": ('''# Fichiers compagnons : lab_utils.py, rl_sb3.py, gru_ppo.py, schemas.py, images/, agents/, meteo_montreal.csv, tous dans lab_rl.zip
 import os, sys, subprocess, urllib.request, zipfile
 try:
     import stable_baselines3                         # Stable-Baselines3 (PPO), absent de Colab par défaut
 except ImportError:
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", "stable-baselines3"], check=True)
 if not os.path.exists("lab_utils.py"):
-    paquet = "lab_rl_prototype.zip"
+    paquet = "lab_rl.zip"
     if not os.path.exists(paquet):
         try:
-            urllib.request.urlretrieve("''' + RAW + '''/fr/lab_rl_prototype.zip", paquet)
+            urllib.request.urlretrieve("''' + RAW + '''/fr/lab_rl.zip", paquet)
             print("Fichiers compagnons téléchargés depuis GitHub.")
         except OSError:                             # GitHub inaccessible : on demande le zip
             try:
                 from google.colab import files      # n'existe que dans Colab
             except ImportError:
                 raise FileNotFoundError("lab_utils.py introuvable : ouvrez ce notebook depuis le dossier décompressé.")
-            print("Téléchargement impossible. Cliquez sur « Choisir des fichiers » et choisissez lab_rl_prototype.zip.")
+            print("Téléchargement impossible. Cliquez sur « Choisir des fichiers » et choisissez lab_rl.zip.")
             zips = [nom for nom in files.upload() if nom.endswith(".zip")]
-            assert zips, "Ce n'était pas un .zip : téléversez lab_rl_prototype.zip."
+            assert zips, "Ce n'était pas un .zip : téléversez lab_rl.zip."
             paquet = zips[0]
     zipfile.ZipFile(paquet).extractall(".")
 ''', '''# Fichiers compagnons : lab_utils.py, rl_sb3.py, gru_ppo.py, schemas.py, blanks.py, images/, agents/, meteo_montreal.csv
@@ -266,18 +266,18 @@ try:
 except ImportError:
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", "stable-baselines3"], check=True)
 if not os.path.exists("blanks.py"):
-    paquet = "lab_rl_prototype.zip"
+    paquet = "lab_rl.zip"
     try:
-        urllib.request.urlretrieve("''' + RAW + '''/fr/lab_rl_prototype.zip", paquet)
+        urllib.request.urlretrieve("''' + RAW + '''/fr/lab_rl.zip", paquet)
         print("Fichiers compagnons téléchargés depuis GitHub.")
     except OSError:                                 # GitHub inaccessible : on demande le zip
         try:
             from google.colab import files          # n'existe que dans Colab
         except ImportError:
             raise FileNotFoundError("blanks.py introuvable : ouvrez ce notebook depuis le dossier fr/ du lab.")
-        print("Téléchargement impossible. Cliquez sur « Choisir des fichiers » et choisissez lab_rl_prototype.zip.")
+        print("Téléchargement impossible. Cliquez sur « Choisir des fichiers » et choisissez lab_rl.zip.")
         zips = [nom for nom in files.upload() if nom.endswith(".zip")]
-        assert zips, "Ce n'était pas un .zip : téléversez lab_rl_prototype.zip."
+        assert zips, "Ce n'était pas un .zip : téléversez lab_rl.zip."
         paquet = zips[0]
     archive = zipfile.ZipFile(paquet)
     for nom in archive.namelist():
@@ -343,7 +343,7 @@ IMPORTS = {
 # Text that would give away an exercise or a question, and the student's own setup
 TEXT = {
     "fr": [
-        ("blob/main/fr/prototype_lab_rl.ipynb", "blob/main/fr/lab_rl_etudiant.ipynb"),
+        ("blob/main/fr/lab_rl.ipynb", "blob/main/fr/lab_rl_etudiant.ipynb"),
         ("**IFT3700/IFT6758 · Science des données · Labo RL**",
          "**IFT3700/IFT6758 · Science des données · Labo RL · version étudiante**"),
         ("> Les corrections des cinq exercices sont déjà écrites. La météo",
@@ -356,7 +356,7 @@ TEXT = {
         ("\n\n> **Vers le contrôle général.** Entraîné sur des maisons qui changent, l'agent continue d'apprendre après son déploiement, avec des poids figés. C'est le meta-RL : la marche du haut.", ""),
     ],
     "en": [
-        ("blob/main/en/rl_lab_prototype_en.ipynb", "blob/main/en/rl_lab_student_en.ipynb"),
+        ("blob/main/en/rl_lab_en.ipynb", "blob/main/en/rl_lab_student_en.ipynb"),
         ("**IFT3700/IFT6758 · Data Science · RL lab · English version**",
          "**IFT3700/IFT6758 · Data Science · RL lab · student version**"),
         ("> The solutions to the five exercises are already written in. The weather",
@@ -370,8 +370,8 @@ TEXT = {
     ],
 }
 
-NOTEBOOKS = {"fr": ("fr/prototype_lab_rl.ipynb", "fr/lab_rl_etudiant.ipynb"),
-             "en": ("en/rl_lab_prototype_en.ipynb", "en/rl_lab_student_en.ipynb")}
+NOTEBOOKS = {"fr": ("fr/lab_rl.ipynb", "fr/lab_rl_etudiant.ipynb"),
+             "en": ("en/rl_lab_en.ipynb", "en/rl_lab_student_en.ipynb")}
 
 
 def swap(text, old, new, count=1):

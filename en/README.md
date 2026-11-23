@@ -1,6 +1,6 @@
 # RL lab, English version: one thermostat, a thousand houses
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb) instructor version, with the solutions
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_en.ipynb) instructor version, with the solutions
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_student_en.ipynb) student version, to fill in on the board
 
@@ -22,7 +22,7 @@ Open the notebook in Jupyter from this folder. You need Python 3.10 or newer wit
 
 ## Preparing to teach
 
-- Open `rl_lab_prototype_en_executed.ipynb` first: it is the same notebook already run, so you can see every figure and number without running anything.
+- Open `rl_lab_en_executed.ipynb` first: it is the same notebook already run, so you can see every figure and number without running anything.
 - The notebook has collapsible **Instructor notes** and **Answer** blocks (click to open). Start with "Instructor notes: the lab in two minutes" at the top. They give the story, what to say, the expected results and the answers to the questions.
 - In class, project the student version and fill in its `___` live. The one-page cheat sheet in `../antiseche/` (`cheat_sheet_en.pdf` or `.html`) has the code to type, with a comment on each line saying what to say.
 
@@ -31,8 +31,8 @@ Open the notebook in Jupyter from this folder. You need Python 3.10 or newer wit
 | File | What it is |
 | --- | --- |
 | `rl_lab_student_en.ipynb` | **the student version to fill in on the board**: each exercise has `___`; while it is empty, the rest runs with the lab's version |
-| `rl_lab_prototype_en.ipynb` | the notebook with the solutions, without outputs |
-| `rl_lab_prototype_en_executed.ipynb` | the same notebook, already run (not in the zip) |
+| `rl_lab_en.ipynb` | the notebook with the solutions, without outputs |
+| `rl_lab_en_executed.ipynb` | the same notebook, already run (not in the zip) |
 | `rl_lab_en.zip` | everything Colab needs, without the executed notebook |
 | `lab_utils_en.py` | house simulator, thermostats, REINFORCE, saddle toy |
 | `rl_sb3_en.py` | the house as a Gymnasium environment, the memoryless Stable-Baselines3 PPO agents, evaluation and memory diagnostics |

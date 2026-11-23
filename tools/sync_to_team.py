@@ -24,7 +24,7 @@ HERE = Path(__file__).resolve().parents[1]
 LAB = "labs/Lab-10-RL"
 SUBJECT = "Update the RL lab from rl-hvac-lab"
 FIRST_SYNC = "a762343"  # team commit whose lab matches this repository's start
-ZIPS = {"fr": "lab_rl_prototype.zip", "en": "rl_lab_en.zip"}
+ZIPS = {"fr": "lab_rl.zip", "en": "rl_lab_en.zip"}
 
 
 def git(repo, *args, binary=False):

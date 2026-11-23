@@ -14,9 +14,9 @@ One thermostat, a thousand houses: a 2-hour lab that climbs from classic RL on o
 | [`fr/`](fr/) | French, shorter, no instructor notes yet | [`fr/LISEZMOI.md`](fr/LISEZMOI.md) |
 | [`antiseche/`](antiseche/) | one-page cheat sheet, FR and EN (HTML for the screen, PDF to print) | `cheat_sheet_en.pdf`, `antiseche_fr.pdf` |
 
-**Colab.** English: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb) French: [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb)
+**Colab.** English: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_en.ipynb) French: [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/lab_rl.ipynb)
 
-Click a badge and run the cells in order. The first cell installs Stable-Baselines3 if needed and downloads the lab's files by itself. If it cannot reach GitHub, it asks for the language's zip (`en/rl_lab_en.zip` or `fr/lab_rl_prototype.zip`).
+Click a badge and run the cells in order. The first cell installs Stable-Baselines3 if needed and downloads the lab's files by itself. If it cannot reach GitHub, it asks for the language's zip (`en/rl_lab_en.zip` or `fr/lab_rl.zip`).
 
 **Student version, to fill in live on the board.** English: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_student_en.ipynb) French: [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/lab_rl_etudiant.ipynb)
 
@@ -40,9 +40,9 @@ Un thermostat, mille maisons : un labo de 2 heures qui monte du RL classique sur
 | [`en/`](en/) | anglais, avec notes pour l'animateur et réponses | [`en/README.md`](en/README.md) |
 | [`antiseche/`](antiseche/) | l'antisèche d'une page, FR et EN (HTML pour l'écran, PDF à imprimer) | `antiseche_fr.pdf`, `cheat_sheet_en.pdf` |
 
-**Colab.** Français : [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb) Anglais : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb)
+**Colab.** Français : [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/lab_rl.ipynb) Anglais : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_en.ipynb)
 
-Cliquez sur un badge et exécutez les cellules dans l'ordre. La première installe Stable-Baselines3 si besoin et télécharge seule les fichiers du lab. Si elle n'atteint pas GitHub, elle demande le zip de votre langue (`fr/lab_rl_prototype.zip` ou `en/rl_lab_en.zip`).
+Cliquez sur un badge et exécutez les cellules dans l'ordre. La première installe Stable-Baselines3 si besoin et télécharge seule les fichiers du lab. Si elle n'atteint pas GitHub, elle demande le zip de votre langue (`fr/lab_rl.zip` ou `en/rl_lab_en.zip`).
 
 **Version étudiante, à compléter en direct au tableau.** Français : [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/lab_rl_etudiant.ipynb) Anglais : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_student_en.ipynb)
 
