@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Copy this lab to labs/Lab-10-RL in the team repository.
 
-The copy gets Colab links that point to the team repository and freshly built
+The copy keeps its Colab links to this public repository and gets freshly built
 zips. This tools/ folder is not copied. The script stops if someone else changed
 the lab folder in the team repository since the last sync.
 
 Usage:
     python tools/sync_to_team.py          # show what would change
     python tools/sync_to_team.py --push   # commit and push to the team's main
+    python tools/sync_to_team.py --zips   # only rebuild the zips in this repository
 """
 import argparse
 import shutil
@@ -23,8 +24,6 @@ HERE = Path(__file__).resolve().parents[1]
 LAB = "labs/Lab-10-RL"
 SUBJECT = "Update the RL lab from rl-hvac-lab"
 FIRST_SYNC = "a762343"  # team commit whose lab matches this repository's start
-PERSONAL_URL = b"paabL/rl-hvac-lab/blob/main/"
-TEAM_URL = b"milarobotlearningcourse/data_science_ift6758/blob/main/labs/Lab-10-RL/"
 ZIPS = {"fr": "lab_rl_prototype.zip", "en": "rl_lab_en.zip"}
 
 
@@ -62,13 +61,16 @@ def build_copy(target):
     with tarfile.open(fileobj=BytesIO(archive)) as tar:
         tar.extractall(target, filter="data")
     shutil.rmtree(target / "tools", ignore_errors=True)
-    for path in target.rglob("*"):
-        if path.suffix in {".md", ".ipynb"}:
-            path.write_bytes(path.read_bytes().replace(PERSONAL_URL, TEAM_URL))
+    build_zips(target)
+
+
+def build_zips(root):
+    skipped = {"__pycache__", ".ipynb_checkpoints", ".DS_Store"}
     for lang, name in ZIPS.items():
-        folder = target / lang
+        folder = root / lang
         (folder / name).unlink()
-        members = sorted(p for p in folder.rglob("*") if p.is_file() and "_execute" not in p.name)
+        members = sorted(p for p in folder.rglob("*") if p.is_file() and "_execute" not in p.name
+                         and not skipped & set(p.relative_to(folder).parts))
         with zipfile.ZipFile(folder / name, "w", zipfile.ZIP_DEFLATED) as bundle:
             for path in members:
                 info = zipfile.ZipInfo(path.relative_to(folder).as_posix(), (2026, 1, 1, 0, 0, 0))
@@ -96,7 +98,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--team", default=str(HERE.parent / "data_science_ift6758"), help="local clone of the team repository")
     parser.add_argument("--push", action="store_true", help="commit and push to the team's main")
+    parser.add_argument("--zips", action="store_true", help="only rebuild the zips in this repository")
     args = parser.parse_args()
+    if args.zips:
+        build_zips(HERE)
+        print("Zips rebuilt.")
+        return
     team = Path(args.team).resolve()
 
     check_personal_repo()

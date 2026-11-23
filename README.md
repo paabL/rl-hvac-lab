@@ -15,9 +15,9 @@ One thermostat, a thousand houses: a 2-hour lab that climbs from classic RL on o
 
 **Colab.** English: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb) French: [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb)
 
-This repository is private, so authorize Colab once first: **File > Open notebook > GitHub**, then tick **Include private repos**. It opens only the notebook, so also download the language's zip (`en/rl_lab_en.zip` or `fr/lab_rl_prototype.zip`) and pick it in the first code cell.
+Click a badge and run the cells in order. The first cell downloads the lab's files by itself. If it cannot reach GitHub, it asks for the language's zip (`en/rl_lab_en.zip` or `fr/lab_rl_prototype.zip`).
 
-**After changing a file,** rebuild that language's zip so it stays in sync with the folder.
+**After changing a file,** rebuild the zips with `python tools/sync_to_team.py --zips`, since the notebooks download them.
 
 ---
 
@@ -36,6 +36,6 @@ Un thermostat, mille maisons : un labo de 2 heures qui monte du RL classique sur
 
 **Colab.** Français : [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb) Anglais : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb)
 
-Ce dépôt étant privé, autorisez d'abord Colab une fois : **Fichier > Ouvrir un notebook > GitHub**, puis cochez **Include private repos**. Il n'ouvre que le notebook : téléchargez aussi le zip de votre langue (`fr/lab_rl_prototype.zip` ou `en/rl_lab_en.zip`), puis choisissez-le dans la première cellule de code.
+Cliquez sur un badge et exécutez les cellules dans l'ordre. La première télécharge seule les fichiers du lab. Si elle n'atteint pas GitHub, elle demande le zip de votre langue (`fr/lab_rl_prototype.zip` ou `en/rl_lab_en.zip`).
 
-**Après avoir modifié un fichier,** reconstruisez le zip de la langue concernée pour qu'il reste à jour.
+**Après avoir modifié un fichier,** reconstruisez les zips avec `python tools/sync_to_team.py --zips`, car les notebooks les téléchargent.

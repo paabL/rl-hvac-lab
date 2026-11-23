@@ -2,18 +2,12 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_prototype_en.ipynb)
 
-> **For TAs.** Since this repository is private, authorize Colab once first: **File > Open notebook > GitHub**, then tick **Include private repos**. It opens only the notebook, so also download [`rl_lab_en.zip`](https://github.com/paabL/rl-hvac-lab/blob/main/en/rl_lab_en.zip), then pick it in the first code cell.
-
 
 A 2-hour Jupyter lab on reinforcement learning for home heating (IFT3700/IFT6758). This is a **prototype**, not the final version. Everything runs on CPU, in Colab or locally.
 
-## Run it in Colab (3 steps)
+## Run it in Colab
 
-1. Go to [colab.research.google.com](https://colab.research.google.com), then **File > Upload notebook** and pick `rl_lab_prototype_en.ipynb`.
-2. Run the first code cell (**0 · Setup**). It shows a **Choose files** button: pick `rl_lab_en.zip`. The cell unzips it next to the notebook.
-3. Run the other cells in order.
-
-If you see `No module named 'lab_utils_en'`, the zip is not there: run the Setup cell again and upload it. Colab deletes uploaded files when the runtime restarts, so after a restart you need to upload the zip again.
+Click the badge above, then run the cells in order. The first code cell (**0 · Setup**) downloads the companion files by itself. If it cannot reach GitHub, it shows a **Choose files** button: pick `rl_lab_en.zip`.
 
 ## Run it locally
 

@@ -2,14 +2,12 @@
 
 [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/fr/prototype_lab_rl.ipynb)
 
-> **Pour les TA.** Le dépôt étant privé, autorisez d'abord Colab une fois : **Fichier > Ouvrir un notebook > GitHub**, puis cochez **Include private repos**. Il n'ouvre que le notebook : téléchargez aussi [`lab_rl_prototype.zip`](https://github.com/paabL/rl-hvac-lab/blob/main/fr/lab_rl_prototype.zip), puis choisissez-le dans la première cellule de code.
-
 
 Prototype à tester et recadrer, pas la version finale. Tout tourne sur CPU.
 
 ## Lancer
 
-**Colab** : ouvrir `prototype_lab_rl.ipynb` (Fichier > Importer un notebook), puis lancer la cellule d'installation : elle affiche un bouton pour téléverser `lab_rl_prototype.zip` et le décompresse.
+**Colab** : cliquer sur le badge ci-dessus, puis exécuter les cellules dans l'ordre. La première télécharge seule les fichiers du lab. Si elle n'atteint pas GitHub, elle affiche un bouton pour téléverser `lab_rl_prototype.zip`.
 
 **En local** : dans ce dossier, avec Python 3.11 et `numpy pandas scikit-learn matplotlib torch ipywidgets`, ouvrir le notebook dans Jupyter.
 
