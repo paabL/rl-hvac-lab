@@ -29,10 +29,12 @@ Unzip `rl_lab_en.zip`, then open `rl_lab_prototype_en.ipynb` in Jupyter from tha
 
 | File | What it is |
 | --- | --- |
-| `rl_lab_prototype_en.ipynb` | the notebook, without outputs |
+| `rl_lab_student_en.ipynb` | **the student version to fill in on the board**, without answers [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/paabL/rl-hvac-lab/blob/main/en/rl_lab_student_en.ipynb) |
+| `rl_lab_prototype_en.ipynb` | the notebook with the solutions, without outputs |
 | `rl_lab_prototype_en_executed.ipynb` | the same notebook, already run (not in the zip) |
 | `rl_lab_en.zip` | everything Colab needs: the files below plus the notebook |
 | `lab_utils_en.py` | house simulator, thermostats, agents, PPO, REINFORCE, memory diagnostics, saddle toy |
+| `blanks.py` | the `___` of the exercises in the student version |
 | `schemas.py` | the three diagrams (house, RL loop, memory agent), shared with the French version |
 | `agents/` | the pre-trained agents (`.pt`) and their learning curves (`.json`) |
 | `montreal_weather.csv` | the hourly January weather used (synthetic for now) |
